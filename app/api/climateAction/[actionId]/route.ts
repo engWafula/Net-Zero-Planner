@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export async function DELETE(req:Request,{ params }: { params: { actionId: string } }) {
     const { actionId } = params;
     if (!actionId) {
-      return Response.json({ error: "ClimateAction ID is required." }, { status: 400 });
+      return NextResponse.json({ error: "ClimateAction ID is required." }, { status: 400 });
     }
   
     try {
@@ -42,9 +42,8 @@ export async function DELETE(req:Request,{ params }: { params: { actionId: strin
         }
       });
   
-      return Response.json(updatedClimateAction);
+      return NextResponse.json(updatedClimateAction);
     } catch (error) {
-      console.error(error);
-      return Response.json({ error: "An error occurred while updating the ClimateAction." }, { status: 500 });
+      return NextResponse.json({ error: "An error occurred while updating the ClimateAction." }, { status: 500 });
     }
   }

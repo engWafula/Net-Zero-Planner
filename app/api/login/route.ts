@@ -22,7 +22,6 @@ export async function POST(req: { json: () => any; }) {
     return Response.json({ error: "Invalid email or password" });
   }
 
-  // Login successful, generate JWT token
   const token =  await jwt.sign(
       { userId: user.id, email: user.email },
       process.env.SECRET_KEY as string

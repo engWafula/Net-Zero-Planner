@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const actionCost = body.cost
   
     if (!netZeroPlanId) {
-      return Response.json({ error: "NetZeroPlan ID is required." }, { status: 400 });
+      return NextResponse.json({ error: "NetZeroPlan ID is required." }, { status: 400 });
     }
   
     try {
@@ -33,10 +33,9 @@ export async function POST(req: Request) {
         }
       });
   
-      return Response.json(climateAction);
+      return NextResponse.json(climateAction);
     } catch (error) {
-      console.error(error);
-      return Response.json({ error: "An error occurred while creating the ClimateAction." }, { status: 500 });
+      return NextResponse.json({ error: "An error occurred while creating the ClimateAction." }, { status: 500 });
     }
   }
   

@@ -1,5 +1,4 @@
 
-import { getUserFromSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 const currentYear = new Date().getFullYear();

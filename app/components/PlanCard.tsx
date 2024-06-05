@@ -1,0 +1,21 @@
+import React from 'react'
+
+interface PlanCardProps{
+    emission:number;
+    targetYear:number;
+    index:number
+}
+
+export default function PlanCard({emission,targetYear,index}:PlanCardProps) {
+  return (
+    <div key={index}>
+        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col h-full">
+          <h2 className="text-2xl font-semibold mb-4">Current CO<sub>2</sub> Emission: {emission} tons</h2>
+          <p className="text-gray-700 mb-4 flex-grow">Target Year: {targetYear}</p>
+          <button className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 mt-auto">
+            View Projections
+          </button>
+        </div>
+    </div>
+  )
+}

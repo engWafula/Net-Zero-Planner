@@ -5,7 +5,6 @@ const currentYear = new Date().getFullYear();
 
 export async function POST(req: { json: () => any; }) {
   const body = await req.json();
-//   const user = await getUserFromSession(req);
 
   const targetYear = body.targetYear;
   const currentEmissions = body.currentEmissions;
@@ -33,8 +32,11 @@ return Response.json(plan);
 
 export async function GET(req: { json: () => any; }) {
 
-
-  const plan = await db.netZeroPlan.findMany();
+  const plan = await db.netZeroPlan.findMany({
+    include: {
+      climateActions: true,
+    },
+  });
 return Response.json(plan);
 
 }

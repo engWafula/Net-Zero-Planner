@@ -28,7 +28,7 @@ model User {
 model ClimateAction {
   id                 String      @id @default(uuid())
   title              String
-  startYear          DateTime
+  startYear          String
   emissionsReduction Int
   actionCost String
   netZeroPlanId      String
@@ -39,7 +39,7 @@ model ClimateAction {
 
 model NetZeroPlan {
   id             String           @id @default(uuid())
-  targetYear     DateTime
+  targetYear     String
   currentEmissions Int
   climateActions ClimateAction[]
   createdAt      DateTime         @default(now())

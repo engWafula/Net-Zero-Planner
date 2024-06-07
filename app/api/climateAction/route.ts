@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear();
 export async function POST(req: Request) {
     const body = await req.json();
   
-    const startYear = new Date(body.startYear);
+    const startYear = body.startYear;
     const emissionsReduction = body.emissionsReduction;
     const title = body.title;
     const netZeroPlanId = body.netZeroPlanId;
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
   
       return NextResponse.json(climateAction);
     } catch (error) {
+      console.log(error)
       return NextResponse.json({ error: "An error occurred while creating the ClimateAction." }, { status: 500 });
     }
   }

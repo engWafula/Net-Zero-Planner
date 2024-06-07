@@ -31,8 +31,30 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const handleOk = async() => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/plan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ currentEmissions:emission, targetYear }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const newPlan = await response.json();
+      setIsModalOpen(false);
+      getPlans()
+      setLoading(false);
+      setEmission(null)
+      setTargetYear(null)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCancel = () => {
@@ -101,7 +123,7 @@ export default function Home() {
           plans?.map((plan, index) => (
             <PlanCard
               key={plan.id}
-              index={index}
+              index={plan.id}
               targetYear={new Date(plan.targetYear).getFullYear()}
               emission={plan.currentEmissions}
             />

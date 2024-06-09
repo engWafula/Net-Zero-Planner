@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
           const user = await db.user.findFirst({ where: { email } });
           const isValidPassword = bcrypt.compareSync(password!, user?.password!);
           if (isValidPassword) {
-            console.log("AM THE TRUE USER=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             return user;
           }
   

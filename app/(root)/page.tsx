@@ -6,34 +6,26 @@ import CardSkeleton from "../components/CardSkeleton";
 import {
   DatePicker,
   DatePickerProps,
+  Empty,
   InputNumber,
   InputNumberProps,
   Modal,
 } from "antd";
-import moment from "moment";
-import { useSession } from "next-auth/react";
-
-interface Plan {
-  id: string;
-  currentEmissions: number;
-  targetYear: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import dayjs from "dayjs";
+import { Plan } from "@/types";
 
 export default function Home() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [emission, setEmission] = useState<Number>();
-  const [targetYear, setTargetYear] = useState<String>();
-
+  const [emission, setEmission] = useState<Number | null>();
+  const [targetYear, setTargetYear] = useState<String | null>();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = async() => {
+  const handleOk = async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/plan", {
@@ -41,19 +33,19 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ currentEmissions:emission, targetYear }),
+        body: JSON.stringify({ currentEmissions: emission, targetYear }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const newPlan = await response.json();
       setIsModalOpen(false);
-      getPlans()
+      getPlans();
       setLoading(false);
-      setEmission(null)
-      setTargetYear(null)
+      setEmission(null);
+      setTargetYear(null);
     } catch (error) {
       console.log(error);
     }
@@ -78,19 +70,19 @@ export default function Home() {
   };
 
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
-    console.log(date, dateString);
-    setTargetYear(dateString);
+    setTargetYear(dateString as string);
   };
 
   const handleChange: InputNumberProps["onChange"] = (value) => {
-    console.log("changed", value);
-    setEmission(value);
+    setEmission(value as number);
   };
 
-  const disabledPastAndCurrentYears = (current: moment.Moment | null) => {
-    if (!current) return false; 
-    const currentYear = new Date().getFullYear();
-    return current.year() <= currentYear; 
+  const disabledPastAndCurrentYears = (
+    current: dayjs.Dayjs | null
+  ): boolean => {
+    if (!current) return false;
+    const currentYear = dayjs().year();
+    return current.year() <= currentYear;
   };
 
   console.log(emission, targetYear);
@@ -121,8 +113,8 @@ export default function Home() {
             <CardSkeleton />
             <CardSkeleton />
           </>
-        ) : (
-          plans?.map((plan, index) => (
+        ) : plans && plans.length > 0 ? (
+          plans.map((plan, index) => (
             <PlanCard
               key={plan.id}
               index={plan.id}
@@ -130,6 +122,8 @@ export default function Home() {
               emission={plan.currentEmissions}
             />
           ))
+        ) : (
+          <Empty description="You currently have no Net zero plans yet" />
         )}
       </section>
       <Modal

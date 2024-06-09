@@ -57,7 +57,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         <h1 className="font-bold text-center text-2xl mb-5">
           {type === 'login' ? 'Login to Net Zero Planner' : 'Register for Net Zero Planner'}
         </h1>
-        <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
+        <div className="bg-white shadow w-full  rounded-lg divide-y divide-gray-200">
           <form className="px-5 py-7">
             <FormInput
               label="E-mail"

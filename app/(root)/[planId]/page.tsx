@@ -17,6 +17,7 @@ import { useFetch } from "@/hooks/useFetch";
 import moment from "moment";
 import Projections from "@/app/components/Projections";
 import { ClimateAction, ClimatePlan } from "@/types";
+import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 
@@ -128,7 +129,7 @@ export default function Page() {
       title: "Actions",
       dataIndex: "",
       key: "actions",
-      render: (_, record: any) => (
+      render: (_: any, record: ClimateAction) => (
         <div className="flex space-x-3">
           <Button type="primary" onClick={() => handleEdit(record)}>
             Edit
@@ -148,12 +149,12 @@ export default function Page() {
     },
   ];
 
-  const disabledPastAndFutureYears = (current: moment.Moment | null) => {
+  const disabledPastAndFutureYears = (current: dayjs.Dayjs | null): boolean => {
     if (!current) return false;
+    const currentYear = dayjs().year(); // Get current year
     const year = current.year();
     return year < currentYear || year > parseInt(data?.targetYear!);
   };
-
 
   return (
     <div className="p-5 ml-40 font-inter min-h-screen bg-gray-100">
@@ -224,7 +225,7 @@ export default function Page() {
             
             min={1}
             className="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-            onChange={(value) => setCost(value)}
+            onChange={(value) => setCost(value as number)}
           />
           <label className="font-semibold text-sm text-gray-600 pb-1 block">
             Estimated Emission Reduction (tons)
@@ -233,7 +234,7 @@ export default function Page() {
             value={estimatedReduction}
             min={1}
             className="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-            onChange={(value) => setEstimatedReduction(value)}
+            onChange={(value) => setEstimatedReduction(value as number)}
           />
           <label className="font-semibold text-sm text-gray-600 pb-1 block">
             Start Year
@@ -241,7 +242,7 @@ export default function Page() {
           <DatePicker
             value={startYear ? moment(startYear, "YYYY") : null}
             disabledDate={disabledPastAndFutureYears}
-            onChange={(date, dateString) => setStartYear(dateString)}
+            onChange={(date, dateString) => setStartYear(dateString as string)}
             picker="year"
             className="w-full px-3 py-2 mt-1 mb-5 rounded-lg"
           />

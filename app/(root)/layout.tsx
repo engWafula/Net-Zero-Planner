@@ -19,9 +19,6 @@ export default   function RootLayout({
 
     if(notLoggedIn) redirect('/signin')
 
-
-
-
     return (
       <div className='h-full'>
         <div className='h-[80px] md:pl-56 fixed insert-y-0 w-full z-50'>

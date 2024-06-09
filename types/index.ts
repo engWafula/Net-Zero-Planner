@@ -17,4 +17,13 @@ export interface ClimateAction {
     updatedAt: string;
     climateActions: ClimateAction[];
   }
+
+
+ export  interface Plan {
+    id: string;
+    currentEmissions: number;
+    targetYear: string;
+    createdAt: string;
+    updatedAt: string;
+  }
   

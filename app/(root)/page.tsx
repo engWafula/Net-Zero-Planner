@@ -11,6 +11,7 @@ import {
   Modal,
 } from "antd";
 import moment from "moment";
+import { useSession } from "next-auth/react";
 
 interface Plan {
   id: string;
@@ -26,6 +27,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emission, setEmission] = useState<Number>();
   const [targetYear, setTargetYear] = useState<String>();
+
 
   const showModal = () => {
     setIsModalOpen(true);

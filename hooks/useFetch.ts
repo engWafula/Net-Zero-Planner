@@ -1,22 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 
-export const useFetch = (url: string) => {
-  const [data, setData] = useState(null);
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState("");
+type FetchState<T> = {
+  data: T | null;
+  isPending: boolean;
+  error: string | null;
+};
+
+export const useFetch = <T,>(url: string) => {
+  const [state, setState] = useState<FetchState<T>>({
+    data: null,
+    isPending: false,
+    error: null,
+  });
 
   const fetchData = useCallback(async () => {
-    setIsPending(true);
+    setState({ ...state, isPending: true });
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(response.statusText);
       const json = await response.json();
-      setIsPending(false);
-      setData(json);
-      setError("");
+      setState({ data: json, isPending: false, error: null });
     } catch (error) {
-      setError("Could not fetch data");
-      setIsPending(false);
+      setState({ data: null, isPending: false, error: "Could not fetch data" });
     }
   }, [url]);
 
@@ -28,5 +33,5 @@ export const useFetch = (url: string) => {
     fetchData();
   };
 
-  return { data, isPending, error, refetch };
+  return { ...state, refetch };
 };

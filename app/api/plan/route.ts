@@ -7,6 +7,10 @@ const currentYear = new Date().getFullYear();
 
 export async function POST(req: { json: () => any; }) {
   const body = await req.json();
+  const session = await getServerSession(authOptions);
+  const email = session?.user?.email  as string
+  const user = await db.user.findUnique({ where: { email } });
+
 
   const targetYear = body.targetYear;
   const currentEmissions = body.currentEmissions;
@@ -23,7 +27,8 @@ export async function POST(req: { json: () => any; }) {
   const plan = await db.netZeroPlan.create({
     data: {
       targetYear,
-      currentEmissions
+      currentEmissions,
+      userId:user?.id
     }
   });
 return Response.json(plan);
@@ -32,16 +37,17 @@ return Response.json(plan);
 
 
 
-export async function GET(req: { json: () => any; }) {
-
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
+  const email = session?.user?.email as string;
+  const user = await db.user.findUnique({ where: { email } });
 
- console.log(session,"AM THE SESSION")
-  const plan = await db.netZeroPlan.findMany({
+  const userNetZeroPlans = await db.netZeroPlan.findMany({
+    where: { userId: user?.id  as string}, 
     include: {
       climateActions: true,
     },
   });
-return Response.json(plan);
 
+  return Response.json(userNetZeroPlans);
 }

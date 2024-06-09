@@ -1,5 +1,7 @@
 
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 const currentYear = new Date().getFullYear();
 
@@ -32,6 +34,9 @@ return Response.json(plan);
 
 export async function GET(req: { json: () => any; }) {
 
+  const session = await getServerSession(authOptions);
+
+ console.log(session,"AM THE SESSION")
   const plan = await db.netZeroPlan.findMany({
     include: {
       climateActions: true,

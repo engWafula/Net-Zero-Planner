@@ -1,26 +1,31 @@
 
+
+"use client"
 import { Main } from "next/document";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useSession } from "next-auth/react";
 
-export default   async function RootLayout({
+export default   function RootLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;
   }>) {
 
-    const loggedIn = true
+    const session = useSession();
+    const notLoggedIn = (session.status=="unauthenticated")
 
-    if(!loggedIn) redirect('/signin')
+    if(notLoggedIn) redirect('/signin')
+
 
 
 
     return (
       <div className='h-full'>
         <div className='h-[80px] md:pl-56 fixed insert-y-0 w-full z-50'>
-          <Header/>
+          <Header userName={session.data?.user?.name}/>
         </div>
         <div className='hidden md:flex h-[100%] w-70 flex-col fixed insert-y-0 z-50'>
          <Sidebar/>

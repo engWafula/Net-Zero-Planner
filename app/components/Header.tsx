@@ -1,6 +1,8 @@
 import React from 'react'
 
-export default function Header() {
+
+
+export default function Header({userName}:any) {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white shadow-sm">
     <div className="flex flex-grow items-center justify-end py-4 px-4 shadow-2 md:px-6 2xl:px-11">
@@ -18,7 +20,7 @@ export default function Header() {
 
         <span className="flex h-12 w-12 items-center justify-center rounded-full  text-center text-white">
           <img className="rounded-full"
-                src={`https://ui-avatars.com/api/name=${"wafula"}&background=random`}
+                src={`https://ui-avatars.com/api/name=${userName}&background=random`}
                 alt="User" />
         </span>
       </div>

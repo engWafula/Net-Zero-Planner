@@ -15,23 +15,25 @@ import {
 import { useParams } from "next/navigation";
 import { useFetch } from "@/hooks/useFetch";
 import moment from "moment";
+import Projections from "@/app/components/Projections";
+import { ClimateAction, ClimatePlan } from "@/types";
 
 const { TabPane } = Tabs;
 
 export default function Page() {
   const [climateActions, setClimateActions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [startYear, setStartYear] = useState();
-  const [title, setTitle] = useState();
-  const [cost, setCost] = useState<Number>();
-  const [estimatedReduction, setEstimatedReduction] = useState();
+  const [startYear, setStartYear] = useState<string>();
+  const [title, setTitle] = useState<string>();
+  const [cost, setCost] = useState<number>();
+  const [estimatedReduction, setEstimatedReduction] = useState<number>();
   const [editingAction, setEditingAction] = useState<boolean>(false);
   const [actionId,setActionId] = useState<string>()
   const [form] = Form.useForm();
   const { planId } = useParams();
   const currentYear = moment().year();
 
-  const { data, isPending, error, refetch } = useFetch(`/api/plan/${planId}`);
+  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(`/api/plan/${planId}`);
 
   const showAddActionModal = () => {
     setIsModalVisible(true);
@@ -68,7 +70,7 @@ export default function Page() {
       console.log(error);
     }
   };
-  const handleDelete = async (record) => {
+  const handleDelete = async (record:ClimateAction) => {
     try {
       const response = await fetch(`/api/climateAction/${record.id}`, {
         method: "DELETE",
@@ -90,7 +92,7 @@ export default function Page() {
     setIsModalVisible(false);
   };
 
-  const handleEdit = (record) => {
+  const handleEdit = (record:ClimateAction) => {
     setActionId(record.id)
     setStartYear(record.startYear);
     setTitle(record.title);
@@ -149,8 +151,10 @@ export default function Page() {
   const disabledPastAndFutureYears = (current: moment.Moment | null) => {
     if (!current) return false;
     const year = current.year();
-    return year < currentYear || year > parseInt(data?.targetYear);
+    return year < currentYear || year > parseInt(data?.targetYear!);
   };
+
+
   return (
     <div className="p-5 ml-40 font-inter min-h-screen bg-gray-100">
       <header>
@@ -175,8 +179,7 @@ export default function Page() {
 
       <Tabs defaultActiveKey="1">
         <TabPane tab="Projections" key="1">
-          {/* Add content for projections here */}
-          <p>Projections content goes here</p>
+        <Projections data={data!}/>
         </TabPane>
         <TabPane tab="Climate Actions" key="2">
           <Table

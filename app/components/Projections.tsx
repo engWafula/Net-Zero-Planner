@@ -68,7 +68,7 @@ const Projections: React.FC<ClimatePlanChartProps> = ({ data }) => {
         height: 350,
       },
       title: {
-        text: 'Emissions Projections Over Time',
+        text: 'CO2 Emissions Projections Over Time',
       },
       xaxis: {
         categories: emissions.map(e => e.year?.toString() ?? 'Unknown'),

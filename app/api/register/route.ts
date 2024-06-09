@@ -1,22 +1,32 @@
 import { db } from "@/lib/db";
-import bcrypt from "bcrypt"
-export async function POST(req: { json: () => any; }) {
+import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
   const body = await req.json();
-  const pass = body.password;
-  if (!pass?.length || pass.length < 5) {
-    new Error('password must be at least 5 characters');
+  const { email, name, password } = body;
+
+  if (!password || password.length < 5) {
+    return NextResponse.json({ error: "Password must be at least 5 characters" }, { status: 400 });
+
   }
 
-  const notHashedPassword = pass;
+  const existingUser = await db.user.findUnique({ where: { email } });
+  if (existingUser) {
+    return NextResponse.json({ error: "User with this email already exists" }, { status: 400 });
+
+  }
+
   const salt = bcrypt.genSaltSync(10);
-  body.password = bcrypt.hashSync(notHashedPassword, salt);
+  const hashedPassword = bcrypt.hashSync(password, salt);
 
   const createdUser = await db.user.create({
     data: {
-      email:body.email,
-      name:body.name,
-      password:body.password
+      email,
+      name,
+      password: hashedPassword
     }
   });
-  return Response.json(createdUser);
+
+  return NextResponse.json(createdUser);
 }

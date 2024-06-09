@@ -1,5 +1,4 @@
 
-import { authenticate } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -43,9 +42,7 @@ export async function POST(req: Request) {
 
 
 export async function GET(req:Request) {
-  const user = await authenticate(req)
   const plan = await db.climateAction.findMany();
-  console.log(user,"AM THE USER =====>")
 return NextResponse.json(plan);
 }
 

@@ -7,11 +7,6 @@ import {useState} from "react";
 
 export default function LoginPage() {
 
-  const session = useSession();
-  const notLoggedIn = (session.status=="authenticated")
-
-  if(notLoggedIn) redirect('/')
-
   return (
     <div>
            <AuthForm type="login"/>

@@ -21,13 +21,13 @@ export default   function RootLayout({
 
     return (
       <div className='h-full'>
-        <div className='h-[80px] md:pl-56 fixed insert-y-0 w-full z-50'>
+        <div className='h-[80px] fixed insert-y-0 w-full z-50'>
           <Header userName={session.data?.user?.name}/>
         </div>
-        <div className='hidden md:flex h-[100%] w-70 flex-col fixed insert-y-0 z-50'>
+        <div className='hidden md:flex h-[100%] flex-col fixed insert-y-0 z-50'>
          <Sidebar/>
         </div>
-        <main className='md:pl-56 bg-gray-100 pt-[80px] h-full'>
+        <main className='bg-gray-100 pt-[80px] h-full'>
         {children}
         </main>
       </div>

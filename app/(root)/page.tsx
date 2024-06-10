@@ -10,6 +10,7 @@ import {
   InputNumber,
   InputNumberProps,
   Modal,
+  message,
 } from "antd";
 import dayjs from "dayjs";
 import { Plan } from "@/types";
@@ -39,6 +40,9 @@ export default function Home() {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
+      message.success('Plan created succesfully');
+
 
       const newPlan = await response.json();
       setIsModalOpen(false);

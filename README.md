@@ -10,14 +10,30 @@ To run this project on your PC, ensure you have the following installed:
 
 ## Start the Project
 
-###  Clone the Repository and start the project
+### Clone the Repository
 First, clone the repository to your local machine:
 ```bash
+git clone https://github.com/engWafula/Net-zero-planner
+````
+### Navigate into the project directory
+````bash
 cd net-zero-planner
-npm i
+````
+### Install node modules into the project
+````bash
+npm install
+````
+
+### Start and run the project using docker-compose
+````bash
 docker compose up
-
-
-
+````
+### Visit you web browser for your project running at port 3000
+````bash
+http://localhost:3000
+````
+### Stop your project from running using docker-compose
+````bash
+docker compose down
 
 

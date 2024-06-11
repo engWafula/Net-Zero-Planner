@@ -7,6 +7,7 @@ The Net Zero Planner App is a web prototype designed to help users plan and trac
 To run this project on your PC, ensure you have the following installed:
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
+- - [Node JS](https://nodejs.org/en)
 
 ## Start the Project
 

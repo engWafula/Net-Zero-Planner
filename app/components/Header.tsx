@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function Header({ userName }: any) {
+interface HeaderProps{
+  userName:string | null | undefined;
+  email:string | null | undefined;
+}
+
+export default function Header({ userName,email }: HeaderProps) {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white shadow-sm">
       <div className="flex ml-20 justify-start items-center ">
@@ -16,6 +21,9 @@ export default function Header({ userName }: any) {
                 <span className="block text-sm font-medium text-black">
                   {userName}
                 </span>
+                <small className="block text-sm font-medium text-gray-500">
+                  {email}
+                </small>
               </span>
               <span className="flex h-12 w-12 items-center justify-center rounded-full  text-center text-white">
                 <img

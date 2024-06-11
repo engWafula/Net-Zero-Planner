@@ -1,5 +1,6 @@
 
 import { db } from "@/lib/db";
+import { ClimateAction } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const currentYear = new Date().getFullYear();
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
     }
   
     try {
-      const climateAction = await db.climateAction.create({
+      const climateAction:ClimateAction = await db.climateAction.create({
         data: {
           title,
           startYear,

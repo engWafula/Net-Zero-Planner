@@ -1,17 +1,12 @@
 'use client';
 import AuthForm from "@/app/components/AuthForm";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import AuthHeader from "@/app/components/AuthHeader";
 
 
 export default function RegisterPage() {
-  const session = useSession();
-  const notLoggedIn = (session.status=="authenticated")
-
-  if(notLoggedIn) redirect('/')
-    
   return (
     <div>
+         <AuthHeader/>
     <AuthForm type="register" />
     </div>
   );

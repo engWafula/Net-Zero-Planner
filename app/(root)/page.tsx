@@ -98,7 +98,7 @@ export default function Home() {
           Net Zero Planner
         </h1>
         <p className="text-lg text-center text-gray-600 mt-2">
-          Plan your path to a sustainable future
+          Plan Your Path to a Sustainable Future with Climate Actions
         </p>
       </header>
       <div className="flex justify-end mb-6">

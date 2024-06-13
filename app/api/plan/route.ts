@@ -5,7 +5,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 
 const currentYear = new Date().getFullYear();
 
-export async function POST(req: { json: () => any; }) {
+export async function POST(req: Request) {
   const body = await req.json();
   const session = await getServerSession(authOptions);
   const email = session?.user?.email  as string

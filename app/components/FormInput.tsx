@@ -19,10 +19,11 @@ const FormInput: React.FC<FormInputProps> = ({ label, type, name, value, onChang
 
   return (
     <div className="mb-5 relative">
-      <label className="font-semibold text-sm text-gray-600 pb-1 block">{label}</label>
+      <label htmlFor={name} className="font-semibold text-sm text-gray-600 pb-1 block">{label}</label>
       <div className="relative">
         <input
           type={type === 'password' && showPassword ? 'text' : type}
+          id={name}
           name={name}
           value={value}
           onChange={onChange}
@@ -34,7 +35,7 @@ const FormInput: React.FC<FormInputProps> = ({ label, type, name, value, onChang
             onClick={handleTogglePasswordVisibility}
             className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-600"
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            {showPassword ? <FaEyeSlash data-testid="eye-slash-icon" /> : <FaEye data-testid="eye-icon" />}
           </div>
         )}
       </div>

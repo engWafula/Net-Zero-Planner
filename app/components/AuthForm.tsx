@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import FormInput from "./FormInput";
 import AuthFooter from "./AuthFooter";
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface AuthFormProps {
   type: "login" | "register";
@@ -15,19 +17,22 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setIsLoading(true);
     if (type === "login") {
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-
+      setIsLoading(false);
       if (result?.error) {
+        setIsLoading(false);
         setError("Invalid Email or Password");
       } else {
         router.push("/");
@@ -43,12 +48,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         });
 
         const result = await response.json();
+        setIsLoading(false);
+
         if (result.error) {
           setError(result.error);
+          setIsLoading(false);
         } else {
           router.push("/signin");
         }
       } catch (error) {
+        setIsLoading(false);
         console.error(error);
       }
     }
@@ -90,11 +99,17 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
             />
             <button
               onClick={handleSubmit}
-              className="transition duration-200 bg-blue-500 hover:bg-blue-600   text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+              className="transition duration-200 bg-blue-500 hover:bg-blue-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+              disabled={isLoading}
             >
-              <span className="inline-block mr-2">
-                {type === "login" ? "Login" : "Register"}
-              </span>
+              {isLoading ? (
+                <Spin className="text-white" indicator={<LoadingOutlined  style={{ fontSize: 24, color: 'white' }} spin />} />
+
+              ) : (
+                <span className="inline-block mr-2">
+                  {type === "login" ? "Login" : "Register"}
+                </span>
+              )}
             </button>
             {error && (
               <div className="flex items-center justify-center mt-2">

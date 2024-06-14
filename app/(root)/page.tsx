@@ -12,7 +12,7 @@ import {
   Pagination
 } from "antd";
 import dayjs from "dayjs";
-import { ClimatePlan} from "@/types";
+import {  ClimatePlans} from "@/types";
 import NumberInput from "../components/NumberInput";
 import moment from "moment";
 import { useFetch } from "@/hooks/useFetch";
@@ -28,7 +28,7 @@ export default function Home() {
   const pageSize = 9;
 
 
-  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(`/api/plan?page=${page}&pageSize=${pageSize}`);
+  const { data, isPending, error, refetch } = useFetch<ClimatePlans>(`/api/plan?page=${page}&pageSize=${pageSize}`);
 
   const showModal = () => {
     setIsModalOpen(true);

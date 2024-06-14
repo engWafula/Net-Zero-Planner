@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { ClimatePlan } from '@/types';
+import { ClimatePlan, Plan } from '@/types';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface ClimatePlanChartProps {
-  data: ClimatePlan;
+  data: Plan;
 }
 
 const Projections: React.FC<ClimatePlanChartProps> = ({ data }) => {

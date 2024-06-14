@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import FormInput from "./FormInput";
 import AuthFooter from "./AuthFooter";
-import { Spin } from "antd";
+import { Spin, message } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 
 interface AuthFormProps {
@@ -31,10 +31,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         password,
       });
       setIsLoading(false);
+      
       if (result?.error) {
         setIsLoading(false);
         setError("Invalid Email or Password");
       } else {
+        message.success("Login Successful")
         router.push("/");
       }
     } else if (type === "register") {
@@ -54,6 +56,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           setError(result.error);
           setIsLoading(false);
         } else {
+          message.success("Account created successfully")
           router.push("/signin");
         }
       } catch (error) {

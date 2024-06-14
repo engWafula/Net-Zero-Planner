@@ -102,8 +102,7 @@ export default function Home() {
         ) : data && data.length > 0 ? (
           data.map((plan, index) => (
             <PlanCard
-              key={plan.id}
-              index={plan.id}
+              index={plan?.id}
               targetYear={new Date(plan.targetYear).getFullYear()}
               emission={plan.currentEmissions}
             />

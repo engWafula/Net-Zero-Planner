@@ -9,7 +9,6 @@ import {
   Form,
   Input,
   DatePicker,
-  InputNumber,
   Popconfirm,
 } from "antd";
 import { useParams } from "next/navigation";
@@ -23,7 +22,6 @@ import NumberInput from "@/app/components/NumberInput";
 const { TabPane } = Tabs;
 
 export default function Page() {
-  const [climateActions, setClimateActions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [startYear, setStartYear] = useState<string | null>();
   const [title, setTitle] = useState<string>();
@@ -31,9 +29,7 @@ export default function Page() {
   const [estimatedReduction, setEstimatedReduction] = useState<number | null>();
   const [editingAction, setEditingAction] = useState<boolean>(false);
   const [actionId, setActionId] = useState<string>();
-  const [form] = Form.useForm();
   const { planId } = useParams();
-  const currentYear = moment().year();
 
   const { data, isPending, error, refetch } = useFetch<ClimatePlan>(
     `/api/plan/${planId}`
@@ -65,7 +61,6 @@ export default function Page() {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       setIsModalVisible(false);
       setCost(null);
       setTitle("");
@@ -157,7 +152,7 @@ export default function Page() {
 
   const disabledPastAndFutureYears = (current: dayjs.Dayjs | null): boolean => {
     if (!current) return false;
-    const currentYear = dayjs().year(); // Get current year
+    const currentYear = dayjs().year(); 
     const year = current.year();
     return year < currentYear || year > parseInt(data?.targetYear!);
   };
@@ -211,17 +206,7 @@ export default function Page() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             type="text"
-            style={{
-              borderRadius: "0.5rem",
-              paddingLeft: "0.75rem",
-              paddingRight: "0.75rem",
-              paddingTop: "0.5rem",
-              paddingBottom: "0.5rem",
-              marginTop: "0.25rem",
-              marginBottom: "1.25rem",
-              fontSize: "0.875rem",
-              width: "100%",
-            }}
+            className=" rounded-md px-3 py-2 mt-1 mb-5 text-sm w-full"
           />
           <NumberInput
             value={cost}

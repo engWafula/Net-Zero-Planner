@@ -1,3 +1,4 @@
+import AuthHeader from "../components/AuthHeader";
 
 export default function RootLayout({
   children,
@@ -6,6 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <main>
+      <AuthHeader/>
       {children}
     </main>
   );

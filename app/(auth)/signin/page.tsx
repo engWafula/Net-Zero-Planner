@@ -10,7 +10,6 @@ export default function LoginPage() {
 
   return (
     <div>
-   <AuthHeader/>
            <AuthForm type="login"/>
     </div>
   );

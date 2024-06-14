@@ -18,8 +18,13 @@ export interface ClimateAction {
     climateActions: ClimateAction[];
   }
 
-  export interface ClimatePlan{
+  export interface ClimatePlans{
     data:Plan[],
+    meta:any
+  }
+
+  export interface ClimatePlan{
+    data:Plan,
     meta:any
   }
 

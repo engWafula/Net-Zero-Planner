@@ -31,7 +31,7 @@ export default function Page() {
   const [actionId, setActionId] = useState<string>();
   const { planId } = useParams();
 
-  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(
+  const { data, isPending, error, refetch } = useFetch<ClimatePlan | null>(
     `/api/plan/${planId}`
   );
 
@@ -53,7 +53,7 @@ export default function Page() {
             startYear: startYear,
             cost: `$${cost}`,
             emissionsReduction: estimatedReduction,
-            netZeroPlanId: data?.id,
+            netZeroPlanId: data?.data.id,
           }),
         }
       );
@@ -154,7 +154,7 @@ export default function Page() {
     if (!current) return false;
     const currentYear = dayjs().year(); 
     const year = current.year();
-    return year < currentYear || year > parseInt(data?.targetYear!);
+    return year < currentYear || year > parseInt(data?.data?.targetYear!);
   };
 
   return (
@@ -164,10 +164,10 @@ export default function Page() {
           Net Zero Planner
         </h1>
         <p className="text-lg text-center text-gray-600 mt-2">
-          Current Carbon Emission: {data?.currentEmissions} tons
+          Current Carbon Emission: {data?.data.currentEmissions} tons
         </p>
         <p className="text-lg text-center text-gray-600">
-          Target Year for Zero Emission: {data?.targetYear}
+          Target Year for Zero Emission: {data?.data.targetYear}
         </p>
       </header>
       <div className="flex justify-end mb-6">
@@ -181,11 +181,11 @@ export default function Page() {
 
       <Tabs defaultActiveKey="1">
         <TabPane tab="Projections" key="1">
-          <Projections data={data!} />
+          <Projections data={data?.data!} />
         </TabPane>
         <TabPane tab="Climate Actions" key="2">
           <Table
-            dataSource={data?.climateActions}
+            dataSource={data?.data.climateActions}
             columns={columns}
             rowKey="action"
           />

@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import React from 'react';
 import { signOut, useSession } from "next-auth/react";
-
+import { useRouter } from 'next/navigation';
 export default function Sidebar() {
+  const router = useRouter()
+  const logout = ()=>{
+    signOut({ redirect: false });
+    router.push('/signin');  }
   return (
     <>
       <div className="h-screen flex bg-gray-200">
@@ -34,7 +38,7 @@ export default function Sidebar() {
           <div className="mt-auto h-16 flex items-center w-full">
             <button
               className="h-16 w-10 mx-auto flex justify-center items-center w-full focus:text-orange-500 hover:bg-red-200 focus:outline-none"
-              onClick={() => signOut()}
+              onClick={logout}
             >
               <svg
                 className="h-5 w-5 text-red-700"

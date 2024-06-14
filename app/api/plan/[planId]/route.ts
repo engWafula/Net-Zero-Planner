@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET(req: Request,{ params }: { params: { planId: string } }) {
+export async function GET(req: NextRequest,{ params }: { params: { planId: string } }) {
     const { planId } = params;
 
     const plan = await db.netZeroPlan.findUnique({
@@ -15,6 +16,9 @@ export async function GET(req: Request,{ params }: { params: { planId: string } 
       },
     });
       
-  return Response.json(plan);
+  return NextResponse.json({
+    data: plan,
+    meta: {}
+  });
   
   }

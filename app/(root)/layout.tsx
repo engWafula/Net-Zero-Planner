@@ -3,10 +3,11 @@
 "use client"
 import { Main } from "next/document";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default   function RootLayout({
     children,
@@ -15,9 +16,13 @@ export default   function RootLayout({
   }>) {
 
     const session = useSession();
-    const notLoggedIn = (session.status=="unauthenticated")
-
-    if(notLoggedIn) redirect('/signin')
+    const router = useRouter();
+    
+    useEffect(() => {
+      if (session.status === 'unauthenticated') {
+        router.push('/signin');
+      }
+    }, [session.status, router]);
 
     return (
       <div className='h-full'>

@@ -9,6 +9,7 @@ import {
   InputNumberProps,
   Modal,
   message,
+  Pagination
 } from "antd";
 import dayjs from "dayjs";
 import { ClimatePlan} from "@/types";
@@ -21,8 +22,13 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emission, setEmission] = useState<number | null>();
   const [targetYear, setTargetYear] = useState<string | null>();
+  const [page, setPage] = useState(1);
+  const [totalPlans, setTotalPlans] = useState(0);
 
-  const { data, isPending, error, refetch } = useFetch<ClimatePlan[]>("/api/plan");
+  const pageSize = 9;
+
+
+  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(`/api/plan?page=${page}&pageSize=${pageSize}`);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -99,8 +105,8 @@ export default function Home() {
             <CardSkeleton />
             <CardSkeleton />
           </>
-        ) : data && data.length > 0 ? (
-          data.map((plan, index) => (
+        ) : data?.data && data?.data.length > 0 ? (
+          data?.data?.map((plan, index) => (
             <PlanCard
               index={plan?.id}
               targetYear={new Date(plan.targetYear).getFullYear()}
@@ -111,6 +117,14 @@ export default function Home() {
           <Empty description="You currently have no Net zero plans yet" />
         )}
       </section>
+      <div className="flex justify-center mt-6">
+        <Pagination
+          current={page}
+          pageSize={pageSize}
+          total={data?.meta?.totalPlans || 0}
+          onChange={(page) => setPage(page)}
+        />
+      </div>
       <Modal
         title="Create New Plan"
         open={isModalOpen}

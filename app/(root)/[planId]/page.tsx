@@ -206,8 +206,17 @@ export default function Page() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             type="text"
-            className=" rounded-md px-3 py-2 mt-1 mb-5 text-sm w-full"
-          />
+            style={{
+              borderRadius: "0.5rem",
+              paddingLeft: "0.75rem",
+              paddingRight: "0.75rem",
+              paddingTop: "0.5rem",
+              paddingBottom: "0.5rem",
+              marginTop: "0.25rem",
+              marginBottom: "1.25rem",
+              fontSize: "0.875rem",
+              width: "100%",
+            }}          />
           <NumberInput
             value={cost}
             onChange={(value) => setCost(value as number)}

@@ -1,26 +1,28 @@
 "use client";
 
 import PlanCard from "../components/PlanCard";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import CardSkeleton from "../components/CardSkeleton";
 import {
   DatePicker,
-  DatePickerProps,
   Empty,
-  InputNumber,
   InputNumberProps,
   Modal,
   message,
 } from "antd";
 import dayjs from "dayjs";
-import { Plan } from "@/types";
+import { ClimatePlan} from "@/types";
+import NumberInput from "../components/NumberInput";
+import moment from "moment";
+import { useFetch } from "@/hooks/useFetch";
 
 export default function Home() {
-  const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [emission, setEmission] = useState<Number | null>();
-  const [targetYear, setTargetYear] = useState<String | null>();
+  const [emission, setEmission] = useState<number | null>();
+  const [targetYear, setTargetYear] = useState<string | null>();
+
+  const { data, isPending, error, refetch } = useFetch<ClimatePlan[]>("/api/plan");
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -43,41 +45,23 @@ export default function Home() {
 
       message.success('Plan created succesfully');
 
-
       const newPlan = await response.json();
       setIsModalOpen(false);
-      getPlans();
       setLoading(false);
       setEmission(null);
       setTargetYear(null);
+      refetch()
     } catch (error) {
       console.log(error);
+      message.error("Internal server error")
     }
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    getPlans();
-  }, []);
-  const getPlans = async () => {
-    setLoading(true);
-    try {
-      const data = await fetch("/api/plan");
-      const plans = await data.json();
-      setPlans(plans);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
-    setTargetYear(dateString as string);
-  };
-
-  const handleChange: InputNumberProps["onChange"] = (value) => {
+  const handleChange: InputNumberProps["onChange"] = (value):void => {
     setEmission(value as number);
   };
 
@@ -88,8 +72,6 @@ export default function Home() {
     const currentYear = dayjs().year();
     return current.year() <= currentYear;
   };
-
-  console.log(emission, targetYear);
 
   return (
     <main className="p-5 font-inter min-h-screen bg-gray-100">
@@ -110,15 +92,15 @@ export default function Home() {
         </button>
       </div>
       <section className="flex items-center justify-center flex-wrap space-x-3 gap-6">
-        {loading ? (
+        {isPending ? (
           <>
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
           </>
-        ) : plans && plans.length > 0 ? (
-          plans.map((plan, index) => (
+        ) : data && data.length > 0 ? (
+          data.map((plan, index) => (
             <PlanCard
               key={plan.id}
               index={plan.id}
@@ -137,20 +119,14 @@ export default function Home() {
         onCancel={handleCancel}
       >
         <div className="px-5 py-7">
-          <label className="font-semibold text-sm text-gray-600 pb-1 block">
-            Current Carbon Emission
-          </label>
-          <InputNumber
-            min={1}
-            className="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-            onChange={handleChange}
-          />
+          <NumberInput label="Current Carbon Emission" value={emission} onChange={handleChange}/>
           <label className="font-semibold text-sm text-gray-600 pb-1 block">
             Target Year
           </label>
           <DatePicker
             disabledDate={disabledPastAndCurrentYears}
-            onChange={onChange}
+            value={targetYear ? moment(targetYear, "YYYY") : null}
+            onChange={(date, dateString) => setTargetYear(dateString as string)}
             picker="year"
             className="w-full px-3 py-2 mt-1 mb-5 rounded-lg"
           />

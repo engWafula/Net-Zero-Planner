@@ -9,7 +9,6 @@ import {
   Form,
   Input,
   DatePicker,
-  InputNumber,
   Popconfirm,
 } from "antd";
 import { useParams } from "next/navigation";
@@ -18,60 +17,62 @@ import moment from "moment";
 import Projections from "@/app/components/Projections";
 import { ClimateAction, ClimatePlan } from "@/types";
 import dayjs from "dayjs";
+import NumberInput from "@/app/components/NumberInput";
 
 const { TabPane } = Tabs;
 
 export default function Page() {
-  const [climateActions, setClimateActions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [startYear, setStartYear] = useState<string>();
+  const [startYear, setStartYear] = useState<string | null>();
   const [title, setTitle] = useState<string>();
-  const [cost, setCost] = useState<number>();
-  const [estimatedReduction, setEstimatedReduction] = useState<number>();
+  const [cost, setCost] = useState<number | null>();
+  const [estimatedReduction, setEstimatedReduction] = useState<number | null>();
   const [editingAction, setEditingAction] = useState<boolean>(false);
-  const [actionId,setActionId] = useState<string>()
-  const [form] = Form.useForm();
+  const [actionId, setActionId] = useState<string>();
   const { planId } = useParams();
-  const currentYear = moment().year();
 
-  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(`/api/plan/${planId}`);
+  const { data, isPending, error, refetch } = useFetch<ClimatePlan>(
+    `/api/plan/${planId}`
+  );
 
   const showAddActionModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = async () => {
-    // form.validateFields().then((values) => {
-    //   setClimateActions([...climateActions, values]);
-    //   setIsModalVisible(false);
-    //   form.resetFields();
-    // });
     try {
-      const response = await fetch(editingAction?`/api/climateAction/${actionId}`:"/api/climateAction", {
-        method: editingAction? "PATCH" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          startYear: startYear,
-          cost: `$${cost}`,
-          emissionsReduction: estimatedReduction,
-          netZeroPlanId: data?.id,
-        }),
-      });
+      const response = await fetch(
+        editingAction ? `/api/climateAction/${actionId}` : "/api/climateAction",
+        {
+          method: editingAction ? "PATCH" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            startYear: startYear,
+            cost: `$${cost}`,
+            emissionsReduction: estimatedReduction,
+            netZeroPlanId: data?.id,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       setIsModalVisible(false);
+      setCost(null);
+      setTitle("");
+      setEstimatedReduction(null);
+      setStartYear(null)
       refetch();
     } catch (error) {
       console.log(error);
     }
   };
-  const handleDelete = async (record:ClimateAction) => {
+
+  const handleDelete = async (record: ClimateAction) => {
     try {
       const response = await fetch(`/api/climateAction/${record.id}`, {
         method: "DELETE",
@@ -93,8 +94,8 @@ export default function Page() {
     setIsModalVisible(false);
   };
 
-  const handleEdit = (record:ClimateAction) => {
-    setActionId(record.id)
+  const handleEdit = (record: ClimateAction) => {
+    setActionId(record.id);
     setStartYear(record.startYear);
     setTitle(record.title);
     setCost(Number(record.actionCost.replace("$", "")));
@@ -151,7 +152,7 @@ export default function Page() {
 
   const disabledPastAndFutureYears = (current: dayjs.Dayjs | null): boolean => {
     if (!current) return false;
-    const currentYear = dayjs().year(); // Get current year
+    const currentYear = dayjs().year(); 
     const year = current.year();
     return year < currentYear || year > parseInt(data?.targetYear!);
   };
@@ -180,7 +181,7 @@ export default function Page() {
 
       <Tabs defaultActiveKey="1">
         <TabPane tab="Projections" key="1">
-        <Projections data={data!}/>
+          <Projections data={data!} />
         </TabPane>
         <TabPane tab="Climate Actions" key="2">
           <Table
@@ -205,37 +206,19 @@ export default function Page() {
             onChange={(e) => setTitle(e.target.value)}
             value={title}
             type="text"
-            style={{
-              borderRadius: "0.5rem",
-              paddingLeft: "0.75rem",
-              paddingRight: "0.75rem",
-              paddingTop: "0.5rem",
-              paddingBottom: "0.5rem",
-              marginTop: "0.25rem",
-              marginBottom: "1.25rem",
-              fontSize: "0.875rem",
-              width: "100%",
-            }}
+            className=" rounded-md px-3 py-2 mt-1 mb-5 text-sm w-full"
           />
-          <label className="font-semibold text-sm text-gray-600 pb-1 block">
-            Cost ($)
-          </label>
-          <InputNumber
+          <NumberInput
             value={cost}
-            
-            min={1}
-            className="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
             onChange={(value) => setCost(value as number)}
+            label="Cost ($)"
           />
-          <label className="font-semibold text-sm text-gray-600 pb-1 block">
-            Estimated Emission Reduction (tons)
-          </label>
-          <InputNumber
+          <NumberInput
             value={estimatedReduction}
-            min={1}
-            className="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
             onChange={(value) => setEstimatedReduction(value as number)}
+            label="Estimated Emission Reduction (tons)"
           />
+
           <label className="font-semibold text-sm text-gray-600 pb-1 block">
             Start Year
           </label>

@@ -24,6 +24,11 @@ cd net-zero-planner
 ````bash
 npm install
 ````
+### Add database migrations
+````bash
+docker compose run --rm web npx prisma migrate
+````
+
 
 ### Start and run the project using docker-compose
 ````bash

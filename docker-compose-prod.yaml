@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./
+      target: runner
+    image: wafula3/net-zero-planer   # Add this line to use the built Docker image
+    volumes:
+      - .:/app
+    command: npm run dev
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://netZeroPlanner:netZeroPlanner2024@db:5432/netZeroPlanner
+      SECRET_KEY: secrterefet
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: netZeroPlanner
+      POSTGRES_PASSWORD: netZeroPlanner2024
+      POSTGRES_DB: netZeroPlanner
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

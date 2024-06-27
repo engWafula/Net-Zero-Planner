@@ -2,13 +2,7 @@ version: '3.8'
 
 services:
   web:
-    build:
-      context: ./
-      target: runner
-    image: wafula3/net-zero-planer   # Add this line to use the built Docker image
-    volumes:
-      - .:/app
-    command: npm run dev
+    image: wafula3/net-zero-planer   
     ports:
       - "3001:3000"
     environment:

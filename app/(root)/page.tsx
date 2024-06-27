@@ -118,12 +118,15 @@ export default function Home() {
         )}
       </section>
       <div className="flex justify-center mt-6">
+        {data?.data && data?.data.length > 0 && (
         <Pagination
           current={page}
           pageSize={pageSize}
           total={data?.meta?.totalPlans || 0}
           onChange={(page) => setPage(page)}
         />
+        )
+}
       </div>
       <Modal
         title="Create New Plan"

@@ -7,7 +7,7 @@ EXPOSE 3000
 # Build stage
 FROM base AS builder
 COPY . .
-RUN npm install
+RUN yarn
 RUN npm run build
 # Production stage
 FROM base AS production

@@ -22,10 +22,10 @@ COPY --from=builder /app/next.config.mjs ./next.config.mjs
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 USER nextjs
-CMD ["npm", "start"]
-# Development stage
-FROM base AS dev
-ENV NODE_ENV=development
-RUN npm install
-COPY . .
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run","dev"]
+# # Development stage
+# FROM base AS dev
+# ENV NODE_ENV=development
+# RUN npm install
+# COPY . .
+# CMD ["npm", "run", "dev"]
